@@ -84,6 +84,8 @@ Below are a list of props the `<ReactSlackChat />` component accepts
   * `defaultMessage`: [OPTIONAL] Prepend a default message to the beginning of the message list, such as an automatic greeting when a user first joins the channel.
   * `singleUserMode`: [OPTIONAL] Pass a boolean to filter messages so the user only sees his/her messages and replies directed at the user in threads on the Slack side.
   * `closeChatButton`: [OPTIONAL] Pass a boolean to add an "x" close button in the corner of the chat window instead of going back to channel list and minimizing.
+  * `closeOnClickOutside`: [OPTIONAL] Pass a boolean to attach an event listener to the dom which closes the chatbox when clicked outside.
+  * `onClose`: [OPTIONAL] Callback function fired when the chatbox is closed.
 
 
 ## Default System Hooks

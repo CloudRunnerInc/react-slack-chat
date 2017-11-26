@@ -501,6 +501,8 @@ export class ReactSlackChat extends Component {
   closeChatBox(e) {
     // stop propagation so we can prevent any other click events from firing
     e.stopPropagation();
+    // persist click event for onClose callback, but only if this is a React Synthetic event
+    if (e.constructor.name.indexOf('SyntheticMouseEvent') > -1) e.persist();
     // Close Chat box only if not already open
     if (this.state.chatbox.active) {
       this.setState({
@@ -513,6 +515,9 @@ export class ReactSlackChat extends Component {
         // Clear load messages time interval
         if (this.activeChannelInterval) {
           clearInterval(this.activeChannelInterval);
+        }
+        if (this.props.onClose) {
+          this.props.onClose(e);
         }
       });
     }
@@ -527,10 +532,12 @@ export class ReactSlackChat extends Component {
     }
 
     // Attach click listener to dom to close chatbox if clicked outside
-    addEventListener('click', (e) => {
-      // Check if chatbox is active
-      return this.state.chatbox.active ? this.closeChatBox(e) : null;
-    });
+    if (this.props.closeOnClickOutside) {
+      addEventListener('click', (e) => {
+        // Check if chatbox is active
+        return this.state.chatbox.active ? this.closeChatBox(e) : null;
+      });
+    }
   }
 
   render() {
@@ -644,5 +651,9 @@ ReactSlackChat.propTypes = {
   themeColor: PropTypes.string,
   userImage: PropTypes.string,
   hooks: PropTypes.array,
-  debugMode: PropTypes.bool
+  debugMode: PropTypes.bool,
+  // attach click listener to dom to close chatbox if clicked outside
+  closeOnClickOutside: PropTypes.bool,
+  // callback fired when the chatbox is closed
+  onClose: PropTypes.func
 };
